@@ -923,7 +923,11 @@ export default class Select<
         focusedOption: focusableOptions[openAtIndex],
         focusedOptionId: this.getFocusedOptionId(focusableOptions[openAtIndex]),
       },
-      () => this.onMenuOpen()
+      () => {
+        // The input can lose focus before this runs (e.g. a parent focuses
+        // itself on mousedown). Opening then would leave the menu stuck open.
+        if (this.state.isFocused) this.onMenuOpen();
+      }
     );
   }
 
